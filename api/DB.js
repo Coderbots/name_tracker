@@ -1,3 +1,7 @@
+const enviorment = require("./env/environments"),
+  PropertiesReader = require("properties-reader"),
+  properties = new PropertiesReader(enviorment);
+
 module.exports = {
-  DB: "mongodb://localhost:27017/ng7crud",
+  DB: properties.get("database.mongodb.url"),
 };

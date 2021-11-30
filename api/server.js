@@ -3,11 +3,16 @@ const express = require("express"),
   bodyParser = require("body-parser"),
   cors = require("cors"),
   mongoose = require("mongoose"),
-  config = require("./DB");
+  config = require("./DB"),
+  enviorment = require("./env/environments"),
+  PropertiesReader = require("properties-reader"),
+  properties = new PropertiesReader(enviorment);
 
 const userRoute = require("./routes/user.route");
 
 mongoose.Promise = global.Promise;
+
+//Connect to Database
 mongoose.connect(config.DB, { useNewUrlParser: true }).then(
   () => {
     console.log("Successfully connected to Database");
@@ -21,7 +26,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 app.use("/users", userRoute);
-let port = process.env.PORT || 4000;
+let port = properties.get("main.app.port");
 
 const server = app.listen(port, () => {
   console.log("Listening on port " + port);
