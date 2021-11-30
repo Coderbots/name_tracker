@@ -3,13 +3,13 @@ const schema = mongoose.Schema;
 
 let user = new schema(
   {
-    person_name: {
-      type: String,
+    person_name: { //Inserted name
+      type: String, 
     },
-    freq_count: {
+    freq_count: { //Number of tumes the name is inserted
       type: Number,
     },
-    req_time: {
+    req_time: { //Date of name insert
       type: Date,
     },
   },
