@@ -21,37 +21,26 @@ userRoutes.route("/").post((req, res) => {
 
   if (name === "") {
     //console.log("Person's name cannot be empty");
-    res.json("Person's name cannot be empty");
+    res.status(400).json("Person's name cannot be empty");
     return;
   }
   //If name is already present, update its fields else add the new name
   User.findOneAndUpdate(
     { person_name: name },
-    { $inc: { freq_count: 1 }, $set: { req_time: new Date() } }
+    { $inc: { freq_count: 1 }, $set: { req_time: new Date() } },
+    // Setting new to true to return new document
+    // Setting upsert to true to add document if not present
+    { upsert: true, new: true } 
   )
     .then((user) => {
       console.log("Within findOneAndUpdate");
-      if (Object.keys(user).length != 0) {
-        console.log(user);
-        res.json("Updated user");
-      } else {
-        console.log("Correctly entered section for new user");
-        reqUser.freq_count = 1;
-        reqUser.req_time = new Date();
-        reqUser
-          .save()
-          .then((savedUser) => {
-            console.log(savedUser);
-            res.json("Added user");
-          })
-          .catch((saveErr) => {
-            res.status(500).json("Unable to add user");
-          });
-      }
+
+      console.log("Updated user:",user);
+      res.json("Updated user");
     })
     .catch((err) => {
       console.log("Error encountered:", err);
-      res.status(500).json("Could not fetch users");
+      res.status(500).json("Could not add users");
     });
 });
 
