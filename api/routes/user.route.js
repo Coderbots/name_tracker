@@ -19,6 +19,16 @@ userRoutes.route("/").post((req, res) => {
 
   console.log("In save");
 
+  // Prevent MongoDB injection attack
+  if (typeof name === 'string') {
+    // this is a string
+    console.log("Username is validated to be a string")
+  } else {
+    console.log("Username is not a string but is of type:",typeof name)
+    res.status(400).json("Username must be a string!");
+    return;
+  }
+
   if (name === "") {
     //console.log("Person's name cannot be empty");
     res.status(400).json("Person's name cannot be empty");
